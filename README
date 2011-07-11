@@ -5,7 +5,7 @@ Copyright 2011 Philipp Wähnert <phil.wnrt@googlemail.com>
 * libsudoku should be extensible library for generating, evaluating and
   solving the well known sudoku puzzles
   
-* sudoku will be an GTK+ application offering a nice GUI to generate,
+* sudoku will be a GTK+ application offering a nice GUI to generate,
   evaluate and solve manually and automaticaly the well known sudoku puzzles.
   It'll use the libsudoku library
 

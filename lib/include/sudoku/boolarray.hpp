@@ -23,6 +23,7 @@
 #include <cstddef>
 #include <algorithm>
 #include <functional>
+#include <ostream>
 
 #include <boost/array.hpp>
 
@@ -175,6 +176,19 @@ namespace Sudoku {
       assert(equal == N);
       return EQUAL;
     }
+  }
+
+  template<std::size_t N>
+  void print(std::ostream& stream, const boost::array<bool, N>& a) {
+    for (unsigned int i = 0; i < N; ++i) {
+      stream << a[i];
+    }
+  }
+  
+  template<std::size_t N>
+  std::ostream& operator << (std::ostream& stream, const boost::array<bool, N>& a) {
+    print(stream, a);
+    return stream;
   }
   
   /*bool operator < (const boost::array<bool, N>& a, const boost::array<bool, N>& b) {
