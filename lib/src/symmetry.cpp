@@ -45,9 +45,8 @@ namespace Sudoku {
       p.assign(false);
       p[i] = true;
       p[get_col(i) + 9 * (8 - get_row(i))] = true;
-      result.add_symmetry(p, false);
+      result.add_symmetry(p);
     }
-    result.normalize();
     return Symmetry(result);
   }
 
@@ -59,18 +58,61 @@ namespace Sudoku {
         p.assign(false);
         p[col + 9 * row] = true;
         p[8 - col + 9 * row] = true;
-        result.add_symmetry(p, false);
+        result.add_symmetry(p);
       }
     }
-    result.normalize();
     return Symmetry(result);
   }
 
-  // const Symmetry ROTATION_90             = Symmetry(1 << 0);
-  // const Symmetry ROTATION_180            = Symmetry(1 << 1);
+  Symmetry init_rotation_180() {
+    Symmetry result;
+    for (int row = 0; row < 5; ++row) {
+      for (int col = 0; col < 9; ++col) {
+        Positions p;
+        p.assign(false);
+        // (col, row) -> (8 - col, 8 - row)
+        p[col + 9 * row] = true;
+        p[8 - col + 9 * (8 - row)] = true;
+        result.add_symmetry(p);
+      }
+    }
+    return Symmetry(result);
+  }
+
+  Symmetry init_diagonal_relfection() {
+    Symmetry result;
+    for (int row = 0; row < 5; ++row) {
+      for (int col = 0; col < 9; ++col) {
+        Positions p;
+        p.assign(false);
+        // (col, row) -> (row, col)
+        p[col + 9 * row] = true;
+        p[row + 9 * col] = true;
+        result.add_symmetry(p);
+      }
+    }
+    return Symmetry(result);
+  }
+
+  Symmetry init_antidiagonal_relfection() {
+    Symmetry result;
+    for (int row = 0; row < 5; ++row) {
+      for (int col = 0; col < 9; ++col) {
+        Positions p;
+        p.assign(false);
+        // (col, row) -> (8 - row, 8 - col)
+        p[col + 9 * row] = true;
+        p[8 - row + 9 * (8 - col)] = true;
+        result.add_symmetry(p);
+      }
+    }
+    return Symmetry(result);
+  }
+
+  const Symmetry ROTATION_180            = init_rotation_180();
   const Symmetry HORIZONTAL_REFLECTION   = init_horizontal_reflection();
   const Symmetry VERTICAL_REFLECTION     = init_vertical_reflection();
-  // const Symmetry DIAGONAL_REFLECTION     = Symmetry(1 << 4);
-  // const Symmetry ANTIDIAGONAL_REFLECTION = Symmetry(1 << 5);
+  const Symmetry DIAGONAL_REFLECTION     = init_diagonal_relfection();
+  const Symmetry ANTIDIAGONAL_REFLECTION = init_antidiagonal_relfection();
 
 } // namespace Sudoku

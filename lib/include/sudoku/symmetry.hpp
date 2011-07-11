@@ -13,7 +13,7 @@ namespace Sudoku {
   public:
     typedef std::list<Positions> EquiClasses;
     typedef EquiClasses::const_iterator const_iterator;
-    
+
     // No cell is symmetric to any other cell
     Symmetry() {
       Positions c;
@@ -28,27 +28,39 @@ namespace Sudoku {
       }
     }
   
-    // TODO: Make normalization local such that an insertion of a new
-    //       equivalence class with following normalization is efficient.
-    //       Thus: The Symmetry class is always normalized
-    void add_symmetry(const Positions& c, bool do_normalize = true) {
-      equi_classes.push_back(c);
-      if (do_normalize) {
-        normalize();
-      }
-    }
+    int count_classes() const { return equi_classes.size(); }
     
+    void add_symmetry(Positions c) {
+      EquiClasses::iterator i = equi_classes.begin();
+      while (i != equi_classes.end()) {
+        const Positions& p = *i;
+        bool common = false;
+        for (int j = 0; j < 81; ++j) {
+          if (p[j] && c[j]) {
+            common = true;
+            break;
+          }
+        }
+        if (common) {
+          or_assign(c, p);
+          i = equi_classes.erase(i);
+        } else {
+          ++i;
+        }
+      }
+      equi_classes.push_back(c);
+    }
+
     void normalize();
     
     void join(const Symmetry& s) {
-      EquiClasses cs = s.equi_classes;
-      equi_classes.merge(cs);
-      normalize();
+      for (EquiClasses::const_iterator i = s.equi_classes.begin(); i != s.equi_classes.end(); ++i) {
+        add_symmetry(*i);
+      }
     }
 
     void print(std::ostream& stream) const {
       for (EquiClasses::const_iterator i = equi_classes.begin(); i != equi_classes.end(); ++i) {
-        // print(stream, *i);
         stream << *i << '\n';
       }
     }
@@ -60,75 +72,6 @@ namespace Sudoku {
     EquiClasses equi_classes;
   };
 
-
-    /*Symmetry(unsigned long value = 0) : value(value) { }
-    
-    bool rotation_90() const { return value[0]; }
-    bool rotation_180() const { return value[1]; }
-    bool horizontal_reflection() const { return value[2]; }
-    bool vertical_reflection() const { return value[3]; }
-    bool diagonal_reflection() const { return value[4]; }
-    bool antidiagonal_reflection() const { return value[5]; }
-
-    std::set<int> associated_points(int i) const;
-
-    void randomize() {
-      for (int i = 0; i < 6; ++i) {
-        value[i] = rand() > (RAND_MAX / 2);
-      }
-    }
-    
-    const Symmetry& operator &= (const Symmetry& s) {
-      value &= s.value;
-      return *this;
-    }
-    
-    const Symmetry& operator |= (const Symmetry& s) {
-      value |= s.value;
-      return *this;
-    }
-
-    const Symmetry& operator ^= (const Symmetry& s) {
-      value ^= s.value;
-      return *this;
-    }
-
-    Symmetry operator ~ () const {
-      Symmetry result;
-      result.value = ~value;
-      return result;
-    }
-
-    bool operator == (const Symmetry& s) const {
-      return value == s.value;
-    }
-
-    bool operator != (const Symmetry& s) const {
-      return value != s.value;
-    }
-    
-  private:
-    std::bitset<6> value;
-  };
-
-  inline Symmetry operator & (const Symmetry& s, const Symmetry& t) {
-    Symmetry result = s;
-    result &= t;
-    return result;
-  }
-
-  inline Symmetry operator | (const Symmetry& s, const Symmetry& t) {
-    Symmetry result = s;
-    result |= t;
-    return result;
-  }
-  
-  inline Symmetry operator ^ (const Symmetry& s, const Symmetry& t) {
-    Symmetry result = s;
-    result ^= t;
-    return result;
-  }*/
-  
   inline Symmetry join(const Symmetry& s, const Symmetry& t) {
     Symmetry result = s;
     result.join(t);
