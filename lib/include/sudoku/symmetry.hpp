@@ -88,12 +88,21 @@ namespace Sudoku {
     return result;
   }
 
-  extern const Symmetry ROTATION_90;
   extern const Symmetry ROTATION_180;
   extern const Symmetry HORIZONTAL_REFLECTION;
   extern const Symmetry VERTICAL_REFLECTION;
   extern const Symmetry DIAGONAL_REFLECTION;
   extern const Symmetry ANTIDIAGONAL_REFLECTION;
+
+  struct StandardSymmetries {
+    bool rotation_180;
+    bool horizontal_reflection;
+    bool vertical_reflection;
+    bool diagonal_reflection;
+    bool antidiagonal_reflection;
+  };
+  
+  StandardSymmetries check_standard_symmetries(const Positions& p);
 
 } // namespace Sudoku
 

@@ -115,4 +115,14 @@ namespace Sudoku {
   const Symmetry DIAGONAL_REFLECTION     = init_diagonal_relfection();
   const Symmetry ANTIDIAGONAL_REFLECTION = init_antidiagonal_relfection();
 
+  StandardSymmetries check_standard_symmetries(const Positions& p) {
+    StandardSymmetries result;
+    result.rotation_180            = ROTATION_180.satisfies(p);
+    result.horizontal_reflection   = HORIZONTAL_REFLECTION.satisfies(p);
+    result.vertical_reflection     = VERTICAL_REFLECTION.satisfies(p);
+    result.diagonal_reflection     = DIAGONAL_REFLECTION.satisfies(p);
+    result.antidiagonal_reflection = ANTIDIAGONAL_REFLECTION.satisfies(p);
+    return result;
+  }
+
 } // namespace Sudoku
