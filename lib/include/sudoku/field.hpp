@@ -28,6 +28,7 @@
 #include <sudoku/cell.hpp>        // Cell in Field
 #include <sudoku/pencilmarks.hpp> // Pencilmarks in get_pencilmarks
 #include <sudoku/positions.hpp>   // Positions in get_..._positions
+#include <sudoku/symmetry.hpp>
 
 namespace Sudoku {
 
@@ -162,6 +163,11 @@ namespace Sudoku {
 
     bool operator == (const Field& f) const {
       return cells == f.cells;
+    }
+
+    bool check_symmetry(const Symmetry& symmetry) const {
+      const Positions p = get_open_positions();
+      return symmetry.satisfies(p);
     }
 
   private:

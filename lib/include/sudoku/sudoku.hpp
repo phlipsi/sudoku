@@ -81,6 +81,10 @@ namespace Sudoku {
         (setup_mode || field == sudoku.field);
     }
 
+    bool check_symmetry(const Symmetry& symmetry) const {
+      return setup_field.check_symmetry(symmetry);
+    }
+
   private:
     bool setup_mode;
     Field setup_field;
