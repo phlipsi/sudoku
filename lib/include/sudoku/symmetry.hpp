@@ -67,6 +67,16 @@ namespace Sudoku {
 
     const_iterator begin() const { return equi_classes.begin(); }
     const_iterator end() const { return equi_classes.end(); }
+
+    bool satisfies(const Positions& p) const {
+      const Positions q = not_op(p);
+      for (EquiClasses::const_iterator i = equi_classes.begin(); i != equi_classes.end(); ++i) {
+        if (!((*i) <= p) && !((*i) <= q)) {
+          return false;
+        }
+      }
+      return true;
+    }
     
   private:
     EquiClasses equi_classes;

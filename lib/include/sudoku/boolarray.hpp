@@ -191,6 +191,16 @@ namespace Sudoku {
     return stream;
   }
   
+  template<std::size_t N>
+  bool operator <= (const boost::array<bool, N>& a, const boost::array<bool, N>& b) {
+    for (unsigned int i = 0; i < N; ++i) {
+      if (a[i] && !b[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   /*bool operator < (const boost::array<bool, N>& a, const boost::array<bool, N>& b) {
     return compare(a, b) == LESS;
   }
