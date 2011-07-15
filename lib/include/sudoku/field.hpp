@@ -146,12 +146,17 @@ namespace Sudoku {
     bool set_digit(int pos, int digit);
     int get_digit(int pos) { return cells[pos].get_digit(); }
     
-    bool unique() const {
+    bool unique(int max_tries = -1) const {
       std::list<Field> sols;
-      return solutions(2, sols) == 1;
+      return solutions(2, sols, max_tries) == 1;
     }
 
-    int solutions(int max, std::list<Field>& sols) const;
+    int count_solutions(int max, int max_tries = -1) const {
+      std::list<Field> sols;
+      return solutions(max, sols, max_tries);
+    }
+
+    int solutions(int max, std::list<Field>& sols, int max_tries = -1) const;
 
     int count_not_fixed() const {
       int result = 0;
@@ -173,7 +178,7 @@ namespace Sudoku {
   private:
     boost::array<Cell, 81> cells;
     
-    void solutions_impl(boost::array<int, 81>& f, int next, int max, int& count, std::list<Field>& sols) const;
+    void solutions_impl(boost::array<int, 81>& f, int next, int max, int& count, int max_tries, int& tries, std::list<Field>& sols) const;
   };
   
   inline std::ostream& operator << (std::ostream& stream, const Field& f) {

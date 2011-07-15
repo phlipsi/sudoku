@@ -32,13 +32,23 @@ namespace Sudoku {
     Sudoku() : setup_mode(true) {
       clear();
     }
+
+    Sudoku(const boost::array<int, 81>& sudoku) {
+      assign(sudoku);
+    }
     
     Sudoku(const std::string& sudoku) {
       assign(sudoku);
     }
     
-    void clear();
+    void clear() {
+      setup_mode = true;
+      setup_field.clear();
+      field = setup_field;
+    }
+    
     void assign(const std::string& sudoku);
+    void assign(const boost::array<int, 81>& sudoku);
     
     void setup();
     void start();
@@ -70,7 +80,11 @@ namespace Sudoku {
     
     bool is_finished() const { return setup_mode ? setup_field.is_finished() : field.is_finished(); }
 
-    bool unique() const { return setup_mode ? setup_field.unique() : field.unique(); }
+    bool unique(int max_tries = -1) const { return setup_mode ? setup_field.unique(max_tries) : field.unique(max_tries); }
+    
+    int count_solutions(int max, int max_tries = -1) const {
+      return setup_mode ? setup_field.count_solutions(max, max_tries) : field.count_solutions(max, max_tries);
+    }
     
     enum Solutions { NONE = 0, UNIQUE = 1, MULTIPLE = 2 };
     Solutions solve();
@@ -83,6 +97,14 @@ namespace Sudoku {
 
     bool check_symmetry(const Symmetry& symmetry) const {
       return setup_field.check_symmetry(symmetry);
+    }
+
+    void print(std::ostream& stream) const {
+      if (setup_mode) {
+        stream << setup_field;
+      } else {
+        stream << field;
+      }
     }
 
   private:

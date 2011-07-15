@@ -27,6 +27,12 @@ namespace Sudoku {
     field = setup_field;
   }
 
+  void Sudoku::assign(const boost::array<int, 81>& sudoku) {
+    setup_mode = false;
+    setup_field.assign(sudoku);
+    field = setup_field;
+  }
+
   void Sudoku::restart_pencilmarks() {
     if (setup_mode) {
       setup_field.restart_pencilmarks();
