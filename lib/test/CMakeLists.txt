@@ -33,3 +33,6 @@ TARGET_LINK_LIBRARIES(solvertest sudoku)
 
 ADD_EXECUTABLE(symmetrytest symmetrytest.cpp)
 TARGET_LINK_LIBRARIES(symmetrytest sudoku)
+
+ADD_EXECUTABLE(generatortest generatortest.cpp)
+TARGET_LINK_LIBRARIES(generatortest sudoku)
