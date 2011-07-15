@@ -140,6 +140,14 @@ namespace Sudoku {
     return -1;
   }
 
+  template<std::size_t N>
+  inline int next(const boost::array<bool, N>& a, int last) {
+    for (unsigned int i = last + 1; i < N; ++i) {
+      if (a[i]) return i;
+    }
+    return -1;
+  }
+
   enum Compare { INCOMPARABLE, EQUAL, LESS, GREATER, LESS_OR_EQUAL, GREATER_OR_EQUAL };
 
   template<std::size_t N>
