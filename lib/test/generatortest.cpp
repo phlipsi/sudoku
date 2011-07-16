@@ -12,7 +12,7 @@
 #include <sudoku/backtracking.hpp>
 
 int main() {
-  srand(time(NULL));
+  // srand(time(NULL));
   
   Sudoku::NakedSingle naked;
   Sudoku::HiddenSingleRow hidden_row;
@@ -34,7 +34,8 @@ int main() {
                        500,
                        // join(join(Sudoku::HORIZONTAL_REFLECTION, Sudoku::VERTICAL_REFLECTION), Sudoku::DIAGONAL_REFLECTION),
                        // Sudoku::HORIZONTAL_REFLECTION,
-                       join(Sudoku::HORIZONTAL_REFLECTION, Sudoku::VERTICAL_REFLECTION),
+                       // join(Sudoku::HORIZONTAL_REFLECTION, Sudoku::VERTICAL_REFLECTION),
+                       Sudoku::Symmetry(),
                        solver,
                        s)) {
     std::cout << "Juhu!" << std::endl;

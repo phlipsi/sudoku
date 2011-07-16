@@ -33,10 +33,13 @@ namespace Sudoku {
       if (data.attempts == 0) {
         return false;
       }
+      if (data.set_digits > 40) {
+        return false;
+      }
       const int next_pos = next(*(data.symmetry_classes[current_symmetry]), last_pos);
       if (next_pos == -1) {
         // current symmetry class is filled
-        if (data.set_digits < 17) {
+        if (data.set_digits < 20) {
           for (unsigned int next_symmetry = current_symmetry + 1; next_symmetry < data.symmetry_classes.size(); ++next_symmetry) {
             if (generate_impl(data, next_symmetry, -1, field)) {
               return true;

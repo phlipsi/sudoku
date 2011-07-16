@@ -129,9 +129,8 @@ namespace Sudoku {
     return true;
   }
 
-  void Field::solutions_impl(boost::array<int, 81>& f, int next, int max, int& count, int max_tries, int& tries, std::list<Field>& sols) const {
-    if (count >= max || (max_tries > 0 && tries >= max_tries)) return;
-    ++tries;
+  void Field::solutions_impl(boost::array<int, 81>& f, int next, int max, int& count, int max_fails, int& fails, std::list<Field>& sols) const {
+    if (count >= max || (max_fails > 0 && fails >= max_fails)) return;
     
     while (next < 81 && f[next] != 0) {
       ++next;
@@ -154,17 +153,21 @@ namespace Sudoku {
         }
       }
     }
+    if (is_empty(allowed)) {
+      ++fails;
+      return;
+    }
     for (int i = 0; i < 9; ++i) {
       if (allowed[i]) {
         f[next] = i + 1;
-        solutions_impl(f, next + 1, max, count, max_tries, tries, sols);
+        solutions_impl(f, next + 1, max, count, max_fails, fails, sols);
         if (count >= max) return;
       }
     }
     f[next] = 0;
   }
 
-  int Field::solutions(int max, std::list<Field>& sols, int max_tries) const {
+  int Field::solutions(int max, std::list<Field>& sols, int max_fails) const {
     boost::array<int, 81> f;
     for (int i = 0; i < 81; i++) {
       f[i] = cells[i].get_digit();
@@ -187,8 +190,8 @@ namespace Sudoku {
       }
     }
     int count = 0;
-    int tries = 0;
-    solutions_impl(f, 0, max, count, max_tries, tries, sols);
+    int fails = 0;
+    solutions_impl(f, 0, max, count, max_fails, fails, sols);
     return count;
   }
 

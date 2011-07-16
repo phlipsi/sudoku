@@ -80,10 +80,10 @@ namespace Sudoku {
     
     bool is_finished() const { return setup_mode ? setup_field.is_finished() : field.is_finished(); }
 
-    bool unique(int max_tries = -1) const { return setup_mode ? setup_field.unique(max_tries) : field.unique(max_tries); }
+    bool unique(int max_fails = -1) const { return setup_mode ? setup_field.unique(max_fails) : field.unique(max_fails); }
     
-    int count_solutions(int max, int max_tries = -1) const {
-      return setup_mode ? setup_field.count_solutions(max, max_tries) : field.count_solutions(max, max_tries);
+    int count_solutions(int max, int max_fails = -1) const {
+      return setup_mode ? setup_field.count_solutions(max, max_fails) : field.count_solutions(max, max_fails);
     }
     
     enum Solutions { NONE = 0, UNIQUE = 1, MULTIPLE = 2 };
