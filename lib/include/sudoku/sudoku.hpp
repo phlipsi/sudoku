@@ -72,6 +72,10 @@ namespace Sudoku {
       return setup_mode ? setup_field.get_not_fixed_digit_positions(digit) : field.get_not_fixed_digit_positions(digit);
     }
 
+    Positions get_open_positions() const {
+      return setup_mode ? setup_field.get_open_positions() : field.get_open_positions();
+    }
+
     const Pencilmarks& get_pencilmarks(int pos) const {
       return setup_mode ? setup_field.get_pencilmarks(pos) : field.get_pencilmarks(pos);
     }
