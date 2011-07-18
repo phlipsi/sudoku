@@ -80,6 +80,15 @@ namespace Sudoku {
   }
 
   template<std::size_t N>
+  inline int count(const boost::array<bool, N>& a) {
+    int result = 0;
+    for (unsigned int i = 0; i < N; ++i) {
+      if (a[i]) ++result;
+    }
+    return result;
+  }
+
+  template<std::size_t N>
   inline bool is_equal(const boost::array<bool, N>& a, bool value) {
     for (unsigned int i = 0; i < N; ++i) {
       if (a[i] != value) return false;
@@ -146,6 +155,21 @@ namespace Sudoku {
       if (a[i]) return i;
     }
     return -1;
+  }
+
+  template<std::size_t N>
+  inline int pick_randomly(const boost::array<bool, N>& a) {
+    int result = -1;
+    int pos = first(a);
+    int so_far = 1;
+    while (pos != -1) {
+      if (std::rand() % so_far == 0) {
+        result = pos;
+      }
+      pos = next(a, pos);
+      ++so_far;
+    }
+    return result;
   }
 
   enum Compare { INCOMPARABLE, EQUAL, LESS, GREATER, LESS_OR_EQUAL, GREATER_OR_EQUAL };
