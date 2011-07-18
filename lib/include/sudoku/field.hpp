@@ -77,7 +77,7 @@ namespace Sudoku {
     
     // Valid field with no unset cells
     bool is_finished() const {
-      return is_valid() && is_empty(get_open_positions());
+      return is_valid() && is_empty(get_not_fixed_positions());
     }
 
     // Where're not yet set cells
