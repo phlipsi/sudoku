@@ -43,8 +43,8 @@ int main() {
   solver.append_technique(hidden_box);
   solver.append_technique(back);
 
-  Sudoku::Proceeding p;
-  if (solver.solve(sudoku, p)) {
+  Sudoku::Proceeding p = solver.solve(sudoku, true);
+  if (p.is_solved()) {
     Sudoku::Technique::Difficulty max_diff = Sudoku::Technique::EASY;
     int score = 0;
     p.evaluate(max_diff, score);

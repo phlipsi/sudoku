@@ -57,12 +57,16 @@ namespace Sudoku {
     int count_steps() const { return steps.size(); }
     const Step& get_step(int index) const { return steps[index]; }
 
+    void set_solved(bool state) { solved = state; }
+    bool is_solved() const { return solved; }
+
     void evaluate(Technique::Difficulty& max_difficulty, int& score) const;
     bool apply(Sudoku& sudoku) const;
     
     void clear_steps() { steps.clear(); }
   private:
     std::vector<Step> steps;
+    bool solved;
   };
 
 } // namespace Sudoku

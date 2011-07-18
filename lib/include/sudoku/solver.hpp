@@ -69,7 +69,7 @@ namespace Sudoku {
     const_iterator begin() const { return list.begin(); }
     const_iterator end() const { return list.end(); }
     
-    bool solve(const Sudoku& sudoku, Proceeding& proceeding);
+    Proceeding solve(const Sudoku& sudoku, bool assume_uniqueness);
   private:
     TechniqueList list;
   };

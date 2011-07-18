@@ -26,8 +26,8 @@
 
 namespace Sudoku {
 
-  bool Solver::solve(const Sudoku& sudoku, Proceeding& proceeding) {
-    const bool unique = sudoku.unique();
+  Proceeding Solver::solve(const Sudoku& sudoku, bool assume_uniqueness) {
+    Proceeding proceeding;
     proceeding.clear_steps();
     list.reset_techniques();
     Sudoku temp = sudoku;
@@ -36,7 +36,7 @@ namespace Sudoku {
     while (!temp.is_finished() && success) {
       success = false;
       for (iterator i = begin(); i != end(); ++i) {
-        if (unique || !i->does_require_uniqueness()) {
+        if (assume_uniqueness || !i->does_require_uniqueness()) {
           Step step = i->try_technique(temp);
           if (!step.is_empty()) {
             if (step.apply(temp)) {
@@ -49,7 +49,8 @@ namespace Sudoku {
       }
     }
     
-    return success;
+    proceeding.set_solved(success);
+    return proceeding;
   }
 
 } // namespace Sudoku
