@@ -68,23 +68,26 @@ namespace Sudoku {
       const Technique::Difficulty difficulty;
       const int min_score;
       const int max_score;
-      int tries;
+      int fails;
       const std::vector<Symmetry::const_iterator>& symmetry_classes;
       Solver& solver;
     };
     
     bool generate_impl(Data& data, int next_symmetry) {
       if (!unique(data.field)) {
+        --data.fails;
         return false;
       }
       const Proceeding p = data.solver.solve(Sudoku(data.field), true);
       if (!p.is_solved()) {
+        --data.fails;
         return false;
       }
       Technique::Difficulty max_diff;
       int score = 0;
       p.evaluate(max_diff, score);
       if (score > data.max_score || max_diff > data.difficulty) {
+        --data.fails;
         return false;
       }
       if (score >= data.min_score && score <= data.max_score && max_diff == data.difficulty) {
@@ -100,6 +103,9 @@ namespace Sudoku {
         if (generate_impl(data, i + 1)) {
           return true;
         }
+        if (data.fails <= 0) {
+          return false;
+        }
         for (int j = 0; j < 81; ++j) {
           if (symmetry_class[j]) {
             data.field[j] = data.original_field[j];
@@ -113,30 +119,31 @@ namespace Sudoku {
 
   bool generate(Technique::Difficulty difficulty,
                 int min_score, int max_score,
-                int max_tries,
+                int max_fails,
                 const Symmetry& symmetry,
                 Solver& solver,
                 Sudoku& sudoku) {
     boost::array<int, 81> original_field;
     original_field.assign(0);
-    if (!generate_full_impl(-1, original_field)) {
-      return false;
+
+    if (generate_full_impl(-1, original_field)) {
+      boost::array<int, 81> field = original_field;
+      
+      std::vector<Symmetry::const_iterator> symmetry_classes;
+      for (Symmetry::const_iterator i = symmetry.begin(); i != symmetry.end(); ++i) {
+        symmetry_classes.push_back(i);
+      }
+      std::random_shuffle(symmetry_classes.begin(), symmetry_classes.end());
+  
+      Data data = { original_field, field, difficulty, min_score, max_score, max_fails, symmetry_classes, solver };
+      const bool result = generate_impl(data, 0);
+      if (result) {
+        sudoku = Sudoku(field);
+        return true;
+      }
     }
-    boost::array<int, 81> field = original_field;
-    std::vector<Symmetry::const_iterator> symmetry_classes;
-    for (Symmetry::const_iterator i = symmetry.begin(); i != symmetry.end(); ++i) {
-      symmetry_classes.push_back(i);
-    }
-    std::random_shuffle(symmetry_classes.begin(), symmetry_classes.end());
     
-    Data data = { original_field, field, difficulty, min_score, max_score, max_tries, symmetry_classes, solver };
-    const bool result = generate_impl(data, 0);
-    if (result) {
-      sudoku = Sudoku(field);
-      return true;
-    } else {
-      sudoku = Sudoku();
-      return false;
-    }
+    sudoku = Sudoku();
+    return false;
   }
 } // namespace Sudoku

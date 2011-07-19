@@ -13,7 +13,7 @@ namespace Sudoku {
 
   bool generate(Technique::Difficulty difficulty,
                 int min_score, int max_score,
-                int max_tries,
+                int max_fails,
                 const Symmetry& symmetry,
                 Solver& solver,
                 Sudoku& sudoku);

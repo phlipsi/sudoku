@@ -13,7 +13,7 @@
 #include <sudoku/lastinstance.hpp>
 
 int main() {
-  // srand(time(NULL));
+  srand(time(NULL));
   
   Sudoku::FullHouse full_house;
   Sudoku::LastInstance last_instance;
@@ -34,7 +34,7 @@ int main() {
 
   Sudoku::Sudoku sudoku;
 
-  if (Sudoku::generate(Sudoku::Technique::EASY, 350, 600, 10, 
+  if (Sudoku::generate(Sudoku::Technique::EASY, 350, 600, 20,
                        // Sudoku::join(Sudoku::HORIZONTAL_REFLECTION, Sudoku::VERTICAL_REFLECTION),
                        Sudoku::join(Sudoku::join(Sudoku::HORIZONTAL_REFLECTION, Sudoku::VERTICAL_REFLECTION), Sudoku::ROTATION_180),
                        // Sudoku::Symmetry(),
@@ -45,8 +45,10 @@ int main() {
     int score;
     Sudoku::Technique::Difficulty difficulty;
     p.evaluate(difficulty, score);
-    std::cout << "Score: " << score << '\n' << "Difficulty: " << difficulty << '\n';
-    p.print(std::cout);
+    std::cout << "Score: " << score << '\n'
+              << "Difficulty: " << difficulty << '\n'
+              << "Steps: " << p.count_steps() << '\n';
+    // p.print(std::cout);
     std::cout << '\n';
   } else {
     std::cout << "Fail!" << std::endl;
