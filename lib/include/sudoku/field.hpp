@@ -132,6 +132,16 @@ namespace Sudoku {
       return result;
     }
 
+    // Where's the given digit set
+    Positions get_fixed_digit_positions(int digit) const {
+      Positions result;
+      for (int i = 0; i < 81; ++i) {
+        result[i] = cells[i].get_digit() == digit;
+      }
+      return result;
+    }
+    
+
     // Where's the given digit allowed but not set
     Positions get_not_fixed_digit_positions(int digit) const {
       Positions result;

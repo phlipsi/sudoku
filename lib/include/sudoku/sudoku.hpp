@@ -68,8 +68,16 @@ namespace Sudoku {
       return setup_mode ? setup_field.get_not_set_sole_positions() : field.get_not_set_sole_positions();
     }
 
+    Positions get_fixed_digit_positions(int digit) const {
+      return setup_mode ? setup_field.get_fixed_digit_positions(digit) : field.get_fixed_digit_positions(digit);
+    }
+
     Positions get_not_fixed_digit_positions(int digit) const {
       return setup_mode ? setup_field.get_not_fixed_digit_positions(digit) : field.get_not_fixed_digit_positions(digit);
+    }
+
+    Positions get_not_fixed_positions() const {
+      return setup_mode ? setup_field.get_not_fixed_positions() : field.get_not_fixed_positions();
     }
 
     Positions get_open_positions() const {
