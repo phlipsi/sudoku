@@ -23,6 +23,6 @@ FIND_PACKAGE(Boost 1.40.0)# REQUIRED filesystem system)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 # MESSAGE(STATUS ${Boost_LIBRARIES})
 
-ADD_LIBRARY(sudoku STATIC positions.cpp field.cpp plainfield.cpp sudoku.cpp action.cpp common_actions.cpp nakedsingle.cpp backtracking.cpp hiddensingle.cpp proceeding.cpp symmetry.cpp solver.cpp generator.cpp) #dancingsolver.cpp dancinglinks.cpp)
+ADD_LIBRARY(sudoku STATIC positions.cpp field.cpp plainfield.cpp sudoku.cpp action.cpp common_actions.cpp nakedsingle.cpp backtracking.cpp hiddensingle.cpp fullhouse.cpp lastinstance.cpp proceeding.cpp symmetry.cpp solver.cpp generator.cpp) #dancingsolver.cpp dancinglinks.cpp)
 TARGET_LINK_LIBRARIES(sudoku ${Boost_LIBRARIES})
  
