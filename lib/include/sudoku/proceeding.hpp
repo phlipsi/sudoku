@@ -64,6 +64,13 @@ namespace Sudoku {
     bool apply(Sudoku& sudoku) const;
     
     void clear_steps() { steps.clear(); }
+    
+    void print(std::ostream& stream) const {
+      for (unsigned int i = 0; i < steps.size(); ++i) {
+        stream << steps[i].get_hint() << '\n';
+      }
+    }
+    
   private:
     std::vector<Step> steps;
     bool solved;
