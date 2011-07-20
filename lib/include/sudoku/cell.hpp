@@ -22,123 +22,142 @@
 
 #include <boost/array.hpp>
 
-#include "boolarray.hpp"
-#include "pencilmarks.hpp"
+#include <sudoku/boolarray.hpp>
+#include <sudoku/pencilmarks.hpp>
+#include <sudoku/property.hpp>
 
 namespace Sudoku {
 
   class Cell {
   public:
-    Cell() : digit(0), count(9) {
+    Cell() : m_digit(0), m_count(9) {
       // set_all_pencilmarks(true);
-      pencilmarks.assign(true);
+      m_pencilmarks.assign(true);
     }
     
-    explicit Cell(int digit) : digit(digit), count(digit != 0 ? 1 : 9) {
+    explicit Cell(int digit) : m_digit(digit), m_count(digit != 0 ? 1 : 9) {
       set_to_digit(digit);
     }
     
     // marks = "138" or marks = "813" means: 1, 3 and 8 are allowed
     explicit Cell(const std::string& marks) 
-      : digit(0), count(0)
+      : m_digit(0), m_count(0)
     {
-      pencilmarks.assign(false);
+      m_pencilmarks.assign(false);
       for (unsigned int i = 0; i < 9 && i < marks.size(); ++i) {
         const int m = marks[i] - 0x31;
         if (m >= 0 && m < 9) {
-          pencilmarks[m] = true;
-          ++count;
+          m_pencilmarks[m] = true;
+          ++m_count;
         }
       }
     }
     
     void set_to_digit(int new_digit) {
-      digit = new_digit;
+      m_digit = new_digit;
       if (new_digit != 0) {
-        count = 1;
-        pencilmarks.assign(false);
-        pencilmarks[new_digit - 1] = true;
+        m_count = 1;
+        m_pencilmarks.assign(false);
+        m_pencilmarks[new_digit - 1] = true;
       } else {
-        count = 9;
-        pencilmarks.assign(true);
+        m_count = 9;
+        m_pencilmarks.assign(true);
       }
     }
     
     int get_digit() const {
-      return digit;
+      return m_digit;
     }
     
     bool is_open() const {
-      return count > 1;
-      // return digit == 0 && is_open(pencilmarks);
+      return m_count > 1;
+      // return m_digit == 0 && is_open(m_pencilmarks);
     }
     
     bool is_sole() const {
-      return count == 1;
-      // return digit != 0 || is_sole(pencilmarks);
+      return m_count == 1;
+      // return m_digit != 0 || is_sole(m_pencilmarks);
     }
     
-    bool is_allowed(int digit) const { return pencilmarks[digit - 1]; }
+    bool is_allowed(int digit) const { return m_pencilmarks[digit - 1]; }
 
-    bool is_fixed() const { return digit != 0; }
+    bool is_fixed() const { return m_digit != 0; }
 
     bool is_empty() const {
-      return count == 0;
-      // return digit == 0 && is_empty(pencilmarks);
+      return m_count == 0;
+      // return m_digit == 0 && is_empty(m_pencilmarks);
     }
     
-    int get_count() const { return count; }
+    int get_count() const { return m_count; }
     
     /*void test() const {
-      if (digit == 0) {
-        assert(is_empty(pencilmarks) || is_open(pencilmarks));
-        assert(!is_sole(pencilmarks));
+      if (m_digit == 0) {
+        assert(is_empty(m_pencilmarks) || is_open(m_pencilmarks));
+        assert(!is_sole(m_pencilmarks));
       } else {
-        assert(count == 1);
-        assert(!is_empty(pencilmarks));
-        assert(!is_open(pencilmarks));
-        assert(is_sole(pencilmarks));
+        assert(m_count == 1);
+        assert(!is_empty(m_pencilmarks));
+        assert(!is_open(m_pencilmarks));
+        assert(is_sole(m_pencilmarks));
       }      
     }*/
     
-    // bool operator [] (int i) const { return pencilmarks[i]; }
-    bool get(int digit) const { return pencilmarks[digit - 1]; }
-    const Pencilmarks& get() const { return pencilmarks; }
+    // bool operator [] (int i) const { return m_pencilmarks[i]; }
+    bool get(int digit) const { return m_pencilmarks[digit - 1]; }
+    const Pencilmarks& get() const { return m_pencilmarks; }
     
     void set(int digit, bool state) {
-      const bool old = pencilmarks[digit - 1];
+      const bool old = m_pencilmarks[digit - 1];
       if (old != state) {
-        pencilmarks[digit - 1] = state;
+        m_pencilmarks[digit - 1] = state;
         if (state) {
-          ++count;
+          ++m_count;
         } else {
-          --count;
+          --m_count;
         }
       }
     }
     
     void set(const Pencilmarks& p) {
-      pencilmarks = p;
-      count = 0;
+      m_pencilmarks = p;
+      m_count = 0;
       for (int i = 0; i < 9; ++i) {
-        if (pencilmarks[i]) ++count;
+        if (m_pencilmarks[i]) ++m_count;
       }
     }
     
     void clear() {
-      digit = 0;
-      count = 9;
-      pencilmarks.assign(true);
+      m_digit = 0;
+      m_count = 9;
+      m_pencilmarks.assign(true);
     }
         
     bool operator == (const Cell& c) const {
-      return digit == c.digit && count == c.count && pencilmarks == c.pencilmarks;
+      return m_digit == c.m_digit && m_count == c.m_count && m_pencilmarks == c.m_pencilmarks;
     }
+
+    typedef Properties::MemberProperty<int, Cell> Digit;
+    typedef Properties::MemberProperty<int, Cell> Count;
+    
+    class Pencilmark {
+    public:
+      typedef Cell Type;
+      Pencilmark(int digit) : digit(digit) { }
       
+      int operator () (const Type& cell) { return cell.get(digit); }
+    private:
+      int digit;
+    };
+    
+    
+    static Digit digit() { return Digit(&Cell::get_digit); }
+    static Count count() { return Count(&Cell::get_count); }
+    static Pencilmark pencilmark(int digit) { return Pencilmark(digit); }
+
   private:
-    int digit;
-    int count;
-    Pencilmarks pencilmarks;
+    int m_digit;
+    int m_count;
+    Pencilmarks m_pencilmarks;
   };
 
 } // namespace Sudoku

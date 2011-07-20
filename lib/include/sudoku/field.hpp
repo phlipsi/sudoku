@@ -80,75 +80,52 @@ namespace Sudoku {
       return is_valid() && is_empty(get_not_fixed_positions());
     }
 
+    // Pleasy use this method instead of the plethora of methods like
+    // get_***_positions() and so on
+    template<typename Property>
+    Positions get_positions(Property property) const {
+      Positions result;
+      Properties::select(cells.begin(), cells.end(), result.begin(), property);
+      return result;
+    }
+
     // Where're not yet set cells
     Positions get_open_positions() const {
-      Positions result;
-      for (int i = 0; i < 81; ++i) {
-        result[i] = cells[i].is_open();
-      }
-      return result;
+      return get_positions(Cell::count() > 1);
     }
     
     Positions get_not_fixed_positions() const {
-      Positions result;
-      for (int i = 0; i < 81; ++i) {
-        result[i] = !cells[i].is_fixed();
-      }
-      return result;
+      return get_positions(Cell::digit() == 0);
     }
     
     // Where're already set cells or cells allowing only one digit
     Positions get_sole_positions() const {
-      Positions result;
-      for (int i = 0; i < 81; ++i) {
-        result[i] = cells[i].is_sole();
-      }
-      return result;
+      return get_positions(Cell::digit() != 0 || Cell::count() == 1);
     }
     
     Positions get_not_set_sole_positions() const {
-      Positions result;
-      for (int i = 0; i < 81; ++i) {
-        result[i] = cells[i].is_sole() && cells[i].get_digit() == 0;
-      }
-      return result;
+      return get_positions(Cell::digit() == 0 && Cell::count() == 1);
     }
     
     // Where're completly empty cells (illegal sudoku state!)
     Positions get_empty_positions() const {
-      Positions result;
-      for (int i = 0; i < 81; ++i) {
-        result[i] = cells[i].is_empty();
-      }
-      return result;
+      return get_positions(Cell::count() == 0);
     }
     
     // Where's the given digit allowed
     Positions get_digit_positions(int digit) const {
-      Positions result;
-      for (int i = 0; i < 81; ++i) {
-        result[i] = cells[i].is_allowed(digit);
-      }
-      return result;
+      return get_positions(Cell::pencilmark(digit));
     }
 
     // Where's the given digit set
     Positions get_fixed_digit_positions(int digit) const {
-      Positions result;
-      for (int i = 0; i < 81; ++i) {
-        result[i] = cells[i].get_digit() == digit;
-      }
-      return result;
+      return get_positions(Cell::digit() == digit);
     }
     
 
     // Where's the given digit allowed but not set
     Positions get_not_fixed_digit_positions(int digit) const {
-      Positions result;
-      for (int i = 0; i < 81; ++i) {
-        result[i] = cells[i].is_allowed(digit) && !cells[i].is_fixed();
-      }
-      return result;
+      return get_positions(Cell::pencilmark(digit) && Cell::digit() == 0);
     }
 
     // according to the cell's peers

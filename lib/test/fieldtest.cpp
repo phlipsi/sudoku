@@ -44,6 +44,58 @@ int main() {
     Field f(sudoku);
     std::stringstream s;
     s << f;
+    
+    Positions p1;
+    p1.assign(false);
+    p1[4] = p1[7] = true;
+    p1[10] = true;
+    p1[21] = p1[22] = p1[23] = p1[25] = true;
+    p1[29] = p1[30] = p1[31] = true;
+    p1[36] = p1[38] = p1[39] = p1[40] = true;
+    p1[53] = true;
+    p1[60] = true;
+    p1[63] = p1[65] = p1[67] = p1[68] = true;
+    p1[72] = p1[74] = p1[75] = p1[76] = true;
+    assert(p1 == f.get_digit_positions(1));
+    
+    Positions open;
+    open.assign(true);
+    open[2] = open[3] = open[5] = false;
+    open[10] = open[11] = open[12] = open[15] = open[16] = false;
+    open[18] = open[19] = open[24] = false;
+    open[27] = open[28] = open[32] = open[34] = false;
+    open[37] = open[41] = open[42] = false;
+    open[45] = open[48] = open[49] = open[53] = false;
+    open[55] = open[56] = open[58] = open[60] = false;
+    open[64] = open[66] = false;
+    open[77] = open[80] = false;
+    assert(open == f.get_open_positions());
+    
+    Positions not_fixed = open;
+    not_fixed[37] = true;
+    assert(not_fixed == f.get_not_fixed_positions());
+
+    Positions sole = not_op(open);
+    assert(sole == f.get_sole_positions());
+    
+    Positions not_set_sole;
+    not_set_sole.assign(false);
+    not_set_sole[37] = true;
+    assert(not_set_sole == f.get_not_set_sole_positions());
+    
+    Positions empty;
+    empty.assign(false);
+    assert(empty == f.get_empty_positions());
+    
+    Positions set1;
+    set1.assign(false);
+    set1[10] = set1[53] = set1[60] = true;
+    assert(set1 == f.get_fixed_digit_positions(1));
+
+    Positions p1_not_fixed = p1;
+    p1_not_fixed[10] = p1_not_fixed[53] = p1_not_fixed[60] = false;
+    assert(p1_not_fixed == f.get_not_fixed_digit_positions(1));
+
     assert(sudoku.compare(s.str()) == 0);
     Cell c0("578");
     assert(f[0] == c0);
