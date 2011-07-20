@@ -4,6 +4,7 @@
 
 #include <sudoku/generator.hpp>
 #include <sudoku/sudoku.hpp>
+#include <sudoku/step.hpp>
 
 #include <sudoku/solver.hpp>
 #include <sudoku/nakedsingle.hpp>
@@ -34,7 +35,7 @@ int main() {
 
   Sudoku::Sudoku sudoku;
 
-  if (Sudoku::generate(Sudoku::Technique::EASY, 350, 600, 20,
+  if (Sudoku::generate(Sudoku::Step::EASY, 350, 600, 20,
                        // Sudoku::join(Sudoku::HORIZONTAL_REFLECTION, Sudoku::VERTICAL_REFLECTION),
                        Sudoku::join(Sudoku::join(Sudoku::HORIZONTAL_REFLECTION, Sudoku::VERTICAL_REFLECTION), Sudoku::ROTATION_180),
                        // Sudoku::Symmetry(),
@@ -43,7 +44,7 @@ int main() {
     std::cout << '\n';
     Sudoku::Proceeding p = solver.solve(sudoku, true);
     int score;
-    Sudoku::Technique::Difficulty difficulty;
+    Sudoku::Step::Difficulty difficulty;
     p.evaluate(difficulty, score);
     std::cout << "Score: " << score << '\n'
               << "Difficulty: " << difficulty << '\n'

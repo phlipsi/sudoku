@@ -32,7 +32,7 @@ namespace Sudoku {
         const int digit = first(already) + 1;
         proposed_actions.push_back(boost::shared_ptr<Action>(new PlaceDigit(9 * j + where, digit)));
         const int points = 4;
-        return Step(*this, vague_hint, hint, proposed_actions, points);
+        return Step(*this, vague_hint, hint, Step::EASY, proposed_actions, points);
       }
       if (is_sole(and_op(p, COLS[j]))) {
         const std::string vague_hint = "Full House";
@@ -54,7 +54,7 @@ namespace Sudoku {
         const int digit = first(already) + 1;
         proposed_actions.push_back(boost::shared_ptr<Action>(new PlaceDigit(9 * where + j, digit)));
         const int points = 4;
-        return Step(*this, vague_hint, hint, proposed_actions, points);
+        return Step(*this, vague_hint, hint, Step::EASY, proposed_actions, points);
       }
       if (is_sole(and_op(p, BOXES[j]))) {
         const std::string vague_hint = "Full House";
@@ -78,7 +78,7 @@ namespace Sudoku {
         const int digit = first(already) + 1;
         proposed_actions.push_back(boost::shared_ptr<Action>(new PlaceDigit(where, digit)));
         const int points = 4;
-        return Step(*this, vague_hint, hint, proposed_actions, points);
+        return Step(*this, vague_hint, hint, Step::EASY, proposed_actions, points);
       }
     }
     return Step();

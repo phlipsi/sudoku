@@ -48,7 +48,7 @@ namespace Sudoku {
             points = 14;
           }
           
-          return Step(*this, vague_hint, hint, proposed_actions, points);
+          return Step(*this, vague_hint, hint, Step::EASY, proposed_actions, points);
         }
       }
     }
@@ -75,7 +75,7 @@ namespace Sudoku {
             points = 20;
           }
 
-          return Step(*this, vague_hint, hint, proposed_actions, points);
+          return Step(*this, vague_hint, hint, Step::EASY, proposed_actions, points);
         }
       }
     }
@@ -102,7 +102,7 @@ namespace Sudoku {
             points = 10;
           }
 
-          return Step(*this, vague_hint, hint, proposed_actions, points);
+          return Step(*this, vague_hint, hint, Step::EASY, proposed_actions, points);
         }
       }
     }

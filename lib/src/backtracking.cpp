@@ -43,7 +43,7 @@ namespace Sudoku {
           proposed_actions.push_back(boost::shared_ptr<Action>(new PlaceDigit(i, digit)));
           const std::string vague_hint = boost::str(boost::format("Put digit %1% in the cell %2%:%3%") % digit % (get_row(i) + 1) % (get_col(i) + 1));
           const std::string hint = vague_hint;
-          return Step(*this, vague_hint, hint, proposed_actions, 1200);
+          return Step(*this, vague_hint, hint, Step::UNFAIR, proposed_actions, 1200);
         }
       }
     }

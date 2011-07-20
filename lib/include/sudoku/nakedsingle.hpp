@@ -26,7 +26,7 @@ namespace Sudoku {
 
   class NakedSingle : public Technique {
   public:
-    NakedSingle() : Technique("Naked single", "Finds cells containing only one possible candidate", "Philipp Wähnert", Technique::EASY, 200, false) { }
+    NakedSingle() : Technique("Naked single", "Finds cells containing only one possible candidate", "Philipp Wähnert", 200, false) { }
   protected:
     virtual Step do_try_technique(const Sudoku& sudoku);
   };

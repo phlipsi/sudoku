@@ -42,7 +42,7 @@ namespace Sudoku {
           const std::string hint = boost::str(boost::format("Digit %1% is the last remaining candidate in cell %2%:%3%") % digit % (get_row(i) + 1) % (get_col(i) + 1));
           const int points = 4;
           
-          return Step(*this, vague_hint, hint, proposed_actions, points);
+          return Step(*this, vague_hint, hint, Step::EASY, proposed_actions, points);
         }
       }
     }

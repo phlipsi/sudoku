@@ -65,7 +65,7 @@ namespace Sudoku {
     struct Data {
       const boost::array<int, 81>& original_field;
       boost::array<int, 81>& field;
-      const Technique::Difficulty difficulty;
+      const Step::Difficulty difficulty;
       const int min_score;
       const int max_score;
       int fails;
@@ -83,7 +83,7 @@ namespace Sudoku {
         --data.fails;
         return false;
       }
-      Technique::Difficulty max_diff;
+      Step::Difficulty max_diff;
       int score = 0;
       p.evaluate(max_diff, score);
       if (score > data.max_score || max_diff > data.difficulty) {
@@ -117,7 +117,7 @@ namespace Sudoku {
     
   }
 
-  bool generate(Technique::Difficulty difficulty,
+  bool generate(Step::Difficulty difficulty,
                 int min_score, int max_score,
                 int max_fails,
                 const Symmetry& symmetry,

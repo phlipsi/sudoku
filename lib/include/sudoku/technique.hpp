@@ -34,17 +34,13 @@ namespace Sudoku {
 
   class Technique : public Labeled {
   public:
-    enum Difficulty { EASY = 1, MODERATE = 2, TOUGH = 3, HARD = 4, UNFAIR = 5 };
-
     Technique(const std::string& name,
               const std::string& description,
               const std::string& author,
-              Difficulty difficulty,
               int admin_score,
               bool requires_uniqueness,
               const HashType& module)
       : Labeled(name, description, author, module),
-        difficulty(difficulty),
         admin_score(admin_score),
         requires_uniqueness(requires_uniqueness),
         usages(0), tries(0)
@@ -53,11 +49,9 @@ namespace Sudoku {
     Technique(const std::string& name,
               const std::string& description,
               const std::string& author,
-              Difficulty difficulty,
               int admin_score,
               bool requires_uniqueness)
       : Labeled(name, description, author, nil_hash()),
-        difficulty(difficulty),
         admin_score(admin_score),
         requires_uniqueness(requires_uniqueness),
         usages(0), tries(0)
@@ -65,7 +59,6 @@ namespace Sudoku {
 
     virtual ~Technique() { }
     
-    Difficulty get_difficulty() const { return difficulty; }
     int get_admin_score() const { return admin_score; }
     int get_usages() const { return usages; }
     int get_tries() const { return tries; }
@@ -92,7 +85,6 @@ namespace Sudoku {
     virtual Step do_try_technique(const Sudoku& sudoku) = 0;
   
   private:
-    Difficulty difficulty;
     int admin_score;
     bool requires_uniqueness;
     int usages;

@@ -27,7 +27,6 @@
 
 #include <sudoku/action.hpp>
 #include <sudoku/step.hpp>
-#include <sudoku/technique.hpp>
 
 namespace Sudoku {
 
@@ -60,7 +59,7 @@ namespace Sudoku {
     void set_solved(bool state) { solved = state; }
     bool is_solved() const { return solved; }
 
-    void evaluate(Technique::Difficulty& max_difficulty, int& score) const;
+    void evaluate(Step::Difficulty& max_difficulty, int& score) const;
     bool apply(Sudoku& sudoku) const;
     
     void clear_steps() { steps.clear(); }

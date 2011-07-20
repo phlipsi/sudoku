@@ -20,32 +20,22 @@
 #include <iostream>
 
 #include <sudoku/solver.hpp>
-#include <sudoku/nakedsingle.hpp>
-#include <sudoku/hiddensingle.hpp>
-#include <sudoku/backtracking.hpp>
-#include <sudoku/technique.hpp>
+#include <sudoku/step.hpp>
+
+#include <sudoku/common_techniques.hpp>
+// #include <sudoku/technique.hpp>
 
 int main() {
   // Sudoku::Sudoku sudoku("502009000000005000308020009000000084005002600910068700000076140000100200003500000");
-  Sudoku::Sudoku sudoku("080000200203090807065018000000000070059000100006000508490025000000800010030006009");
-
-
-  Sudoku::NakedSingle naked;
-  Sudoku::HiddenSingleRow hidden_row;
-  Sudoku::HiddenSingleColumn hidden_column;
-  Sudoku::HiddenSingleBox hidden_box;
-  Sudoku::BackTracking back;
+  // Sudoku::Sudoku sudoku("080000200203090807065018000000000070059000100006000508490025000000800010030006009");
+  Sudoku::Sudoku sudoku("005160000600073000300005706000030691139756482862491007401000005000500008000007200");
   
   Sudoku::Solver solver;
-  solver.append_technique(naked);
-  solver.append_technique(hidden_row);
-  solver.append_technique(hidden_column);
-  solver.append_technique(hidden_box);
-  solver.append_technique(back);
+  register_common_techniques(solver);
 
   Sudoku::Proceeding p = solver.solve(sudoku, true);
   if (p.is_solved()) {
-    Sudoku::Technique::Difficulty max_diff = Sudoku::Technique::EASY;
+    Sudoku::Step::Difficulty max_diff = Sudoku::Step::EASY;
     int score = 0;
     p.evaluate(max_diff, score);
     std::cout << "Difficulty: " << max_diff << '\n' << "Score: " << score << std::endl;

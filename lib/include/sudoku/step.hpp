@@ -31,20 +31,29 @@ namespace Sudoku {
 
   class Step {
   public:
+    enum Difficulty { EASY = 1, MODERATE = 2, TOUGH = 3, HARD = 4, UNFAIR = 5 };
+
     Step() : technique(0), points(0) { }
     
     Step(Technique& technique,
          const std::string& vague_hint,
          const std::string& hint,
+         Difficulty difficulty,
          const Actions& actions,
          int points)
-      : technique(&technique), vague_hint(vague_hint), hint(hint), actions(actions), points(points) { }
+      : technique(&technique),
+        vague_hint(vague_hint),
+        hint(hint),
+        difficulty(difficulty),
+        actions(actions),
+        points(points) { }
 
     void inc_points(int increment) { points += increment; }
 
     Technique& get_technique() const { return *technique; }
     const std::string& get_vague_hint() const { return vague_hint; }
     const std::string& get_hint() const { return hint; }
+    Difficulty get_difficulty() const { return difficulty; }
     int get_points() const { return points; }
 
     bool is_empty() const {
@@ -59,6 +68,7 @@ namespace Sudoku {
     Technique* technique;
     std::string vague_hint;
     std::string hint;
+    Difficulty difficulty;
     Actions actions;
     int points;
   };

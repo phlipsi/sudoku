@@ -26,21 +26,21 @@ namespace Sudoku {
 
   class HiddenSingleRow : public Technique {
   public:
-    HiddenSingleRow() : Technique("Hidden single in a row", "Only one cell in a given row can hold a certain digit", "Philipp Wähnert", Technique::EASY, 0, false) { }
+    HiddenSingleRow() : Technique("Hidden single in a row", "Only one cell in a given row can hold a certain digit", "Philipp Wähnert", 0, false) { }
   protected:
     virtual Step do_try_technique(const Sudoku& sudoku);
   };
 
   class HiddenSingleColumn : public Technique {
   public:
-    HiddenSingleColumn() : Technique("Hidden single in a column", "Only one cell in a given column can hold a certain digit", "Philipp Wähnert", Technique::EASY, 0, false) { }
+    HiddenSingleColumn() : Technique("Hidden single in a column", "Only one cell in a given column can hold a certain digit", "Philipp Wähnert", 0, false) { }
   protected:
     virtual Step do_try_technique(const Sudoku& sudoku);
   };
 
   class HiddenSingleBox : public Technique {
   public:
-    HiddenSingleBox() : Technique("Hidden single in a box", "Only one cell in a given box can hold a certain digit", "Philipp Wähnert", Technique::EASY, 0, false) { }
+    HiddenSingleBox() : Technique("Hidden single in a box", "Only one cell in a given box can hold a certain digit", "Philipp Wähnert", 0, false) { }
   protected:
     virtual Step do_try_technique(const Sudoku& sudoku);
   };

@@ -71,7 +71,7 @@ namespace Sudoku {
     for (int i = 0; i < 81; ++i) {
       if (places[i]) {
         const bool temp_result = sudoku.set_pencilmark(i, digit, false);
-        result = result && temp_result;
+        result = result || temp_result;
       }
     }
     return result;

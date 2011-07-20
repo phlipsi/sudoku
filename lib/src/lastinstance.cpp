@@ -21,7 +21,7 @@ namespace Sudoku {
         Actions proposed_actions;
         proposed_actions.push_back(boost::shared_ptr<Action>(new PlaceDigit(pos, d)));
         const int points = 6;
-        return Step(*this, vague_hint, hint, proposed_actions, points);
+        return Step(*this, vague_hint, hint, Step::EASY, proposed_actions, points);
       }
     }
     return Step();

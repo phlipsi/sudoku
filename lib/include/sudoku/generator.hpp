@@ -1,7 +1,7 @@
 #ifndef __GENERATOR_HPP
 #define __GENERATOR_HPP
 
-#include <sudoku/technique.hpp>
+#include <sudoku/step.hpp>
 
 namespace Sudoku {
 
@@ -11,7 +11,7 @@ namespace Sudoku {
   
   Sudoku generate_full();
 
-  bool generate(Technique::Difficulty difficulty,
+  bool generate(Step::Difficulty difficulty,
                 int min_score, int max_score,
                 int max_fails,
                 const Symmetry& symmetry,

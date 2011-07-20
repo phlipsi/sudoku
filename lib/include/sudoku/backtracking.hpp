@@ -27,7 +27,7 @@ namespace Sudoku {
   class BackTracking : public Technique {
   public:
     BackTracking()
-      : Technique("Backtracking", "Finds a digit by simply trying all possible choices", "Philipp Wähnert", Technique::UNFAIR, 0, false) { }
+      : Technique("Backtracking", "Finds a digit by simply trying all possible choices", "Philipp Wähnert", 0, false) { }
 
   protected:
     virtual Step do_try_technique(const Sudoku& sudoku);

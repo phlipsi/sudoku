@@ -26,15 +26,15 @@
 
 namespace Sudoku {
 
-  void Proceeding::evaluate(Technique::Difficulty& max_difficulty, int& score) const {
-    max_difficulty = Technique::EASY;
+  void Proceeding::evaluate(Step::Difficulty& max_difficulty, int& score) const {
+    max_difficulty = Step::EASY;
     score = 0;
 
     for (unsigned int i = 0; i < steps.size(); ++i) {
       const Step& step = steps[i];
       score += step.get_points();
-      if (max_difficulty <= step.get_technique().get_difficulty()) {
-        max_difficulty = step.get_technique().get_difficulty();
+      if (max_difficulty <= step.get_difficulty()) {
+        max_difficulty = step.get_difficulty();
       }
     }
   }
