@@ -10,7 +10,7 @@
 namespace Sudoku {
 
   Step FullHouse::do_try_technique(const Sudoku& sudoku) {
-    const Positions p = sudoku.get_not_fixed_positions();
+    const Positions p = sudoku.get_positions(Cell::digit() == 0); // sudoku.get_not_fixed_positions();
     for (int j = 0; j < 9; ++j) {
       if (is_sole(and_op(p, ROWS[j]))) {
         const std::string vague_hint = "Full House";
