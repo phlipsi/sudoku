@@ -7,35 +7,24 @@
 #include <sudoku/step.hpp>
 
 #include <sudoku/solver.hpp>
-#include <sudoku/nakedsingle.hpp>
-#include <sudoku/hiddensingle.hpp>
-#include <sudoku/backtracking.hpp>
-#include <sudoku/fullhouse.hpp>
-#include <sudoku/lastinstance.hpp>
+#include <sudoku/common_techniques.hpp>
 
 int main() {
   srand(time(NULL));
-  
-  Sudoku::FullHouse full_house;
-  Sudoku::LastInstance last_instance;
-  Sudoku::HiddenSingleRow hidden_row;
-  Sudoku::HiddenSingleColumn hidden_column;
-  Sudoku::HiddenSingleBox hidden_box;
-  Sudoku::NakedSingle naked;
-  Sudoku::BackTracking back;
-  
+    
   Sudoku::Solver solver;
-  solver.append_technique(full_house);
-  solver.append_technique(last_instance);
-  solver.append_technique(hidden_row);
-  solver.append_technique(hidden_column);
-  solver.append_technique(hidden_box);
-  solver.append_technique(naked);
-  solver.append_technique(back);
+  solver.append_technique(Sudoku::full_house);
+  solver.append_technique(Sudoku::last_instance);
+  solver.append_technique(Sudoku::hidden_row);
+  solver.append_technique(Sudoku::hidden_column);
+  solver.append_technique(Sudoku::hidden_box);
+  solver.append_technique(Sudoku::naked_single);
+  solver.append_technique(Sudoku::naked_pair);
+  // solver.append_technique(Sudoku::back_tracking);
 
   Sudoku::Sudoku sudoku;
 
-  if (Sudoku::generate(Sudoku::Step::EASY, 350, 600, 20,
+  if (Sudoku::generate(Sudoku::Step::MODERATE, 1, 1000, 500,
                        // Sudoku::join(Sudoku::HORIZONTAL_REFLECTION, Sudoku::VERTICAL_REFLECTION),
                        Sudoku::join(Sudoku::join(Sudoku::HORIZONTAL_REFLECTION, Sudoku::VERTICAL_REFLECTION), Sudoku::ROTATION_180),
                        // Sudoku::Symmetry(),

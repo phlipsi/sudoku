@@ -28,7 +28,8 @@
 int main() {
   // Sudoku::Sudoku sudoku("502009000000005000308020009000000084005002600910068700000076140000100200003500000");
   // Sudoku::Sudoku sudoku("080000200203090807065018000000000070059000100006000508490025000000800010030006009");
-  Sudoku::Sudoku sudoku("005160000600073000300005706000030691139756482862491007401000005000500008000007200");
+  // Sudoku::Sudoku sudoku("005160000600073000300005706000030691139756482862491007401000005000500008000007200");
+  Sudoku::Sudoku sudoku("010000060003106700760204051006509200000000000005801400250608094009405100040000080");
   
   Sudoku::Solver solver;
   register_common_techniques(solver);
@@ -40,7 +41,7 @@ int main() {
     p.evaluate(max_diff, score);
     std::cout << "Difficulty: " << max_diff << '\n' << "Score: " << score << std::endl;
     for (int i = 0; i < p.count_steps(); ++i) {
-      std::cout << i << '\t' << p.get_step(i).get_hint() << std::endl;
+      std::cout << i << '\t' << p.get_step(i).get_hint() << '\t' << p.get_step(i).get_points() << std::endl;
     }
   } else {
     std::cout << "Can't solve sudoku" << std::endl;

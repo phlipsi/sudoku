@@ -10,137 +10,69 @@
 namespace Sudoku {
 
   Step NakedPair::do_try_technique(const Sudoku& sudoku) {
-    for (int k = 0; k < 9; ++k) {
-      int box_index1 = first(BOXES[k]);
-      for (int i = 0; i < 9; ++i) {
-        {
-          const Pencilmarks& p1 = sudoku.get_pencilmarks(9 * k + i);
-          if (count(p1) == 2) {
-            for (int j = i + 1; j < 9; ++j) {
-              const Pencilmarks& p2 = sudoku.get_pencilmarks(9 * k + j);
-              if (p1 == p2) {
-                const int d1 = first(p1) + 1;
-                const int d2 = next(p1, d1 - 1) + 1;
-                
-                const int box = get_box(9 * k + i);
-                if (box == get_box(9 * k + j)) {
-                  const std::string vague_hint = "Locked pair";
-                  const std::string hint = boost::str(boost::format("Locked pair %1%,%2% in row %3% and box %4%") % d1 % d2 % (k + 1) % (box + 1));
-                  Actions proposed_actions;
-                  Positions del = or_op(ROWS[k], BOXES[box]);
-                  del[9 * k + i] = false;
-                  del[9 * k + j] = false;
-                  proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del, d1)));
-                  proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del, d2)));
-                  const int points = 40;
-                  return Step(*this, vague_hint, hint, Step::MODERATE, proposed_actions, points);
+    const Positions pairs = sudoku.get_positions(Cell::count() == 2);
+    for (int pos1 = first(pairs); pos1 != -1; pos1 = next(pairs, pos1)) {
+      for (int pos2 = next(pairs, pos1); pos2 != -1; pos2 = next(pairs, pos2)) {
+        if (PROPER_PEERS[pos1][pos2]) {
+          const Positions common_peers = and_op(PROPER_PEERS[pos1], PROPER_PEERS[pos2]);
+          const Pencilmarks& p = sudoku.get_pencilmarks(pos1);
+          if (p == sudoku.get_pencilmarks(pos2)) {
+            int digit1 = first(p) + 1;
+            int digit2 = next(p, digit1 - 1) + 1;
+            const Positions del_digit1 = and_op(common_peers, sudoku.get_positions(Cell::pencilmark(digit1)));
+            const Positions del_digit2 = and_op(common_peers, sudoku.get_positions(Cell::pencilmark(digit2)));
+            if (count(del_digit1) > 0 || count(del_digit2) > 0) {
+              int common_row = get_row(pos1);
+              if (common_row != get_row(pos2)) {
+                common_row = -1;
+              }
+              int common_col = get_col(pos1);
+              if (common_col != get_col(pos2)) {
+                common_col = -1;
+              }
+              int common_box = get_box(pos1);
+              if (common_box != get_box(pos2)) {
+                common_box = -1;
+              }
+              std::string vague_hint;
+              std::string hint;
+              int points = 0;
+              Step::Difficulty difficulty = Step::EASY;
+              if (common_box != -1) {
+                if (common_row != -1) {
+                  vague_hint = "Locked Pair";
+                  hint = boost::str(boost::format("Locked pair %1%,%2% in box %3% and row %4%") % digit1 % digit2 % (common_box + 1) % (common_row + 1));
+                  difficulty = Step::MODERATE;
+                  points = 40;
+                } else if (common_col != -1) {
+                  vague_hint = "Locked Pair";
+                  hint = boost::str(boost::format("Locked pair %1%,%2% in box %3% and column %4%") % digit1 % digit2 % (common_box + 1) % (common_col + 1));
+                  difficulty = Step::MODERATE;
+                  points = 40;
                 } else {
-                  const std::string vague_hint = "Naked pair";
-                  const std::string hint = boost::str(boost::format("Naked pair %1%,%2% in row %3%") % d1 % d2 % (k + 1));
-                  Actions proposed_actions;
-                  Positions del = ROWS[k];
-                  del[9 * k + i] = false;
-                  del[9 * k + j] = false;
-                  proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del, d1)));
-                  proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del, d2)));
-                  const int points = 60;
-                  return Step(*this, vague_hint, hint, Step::TOUGH, proposed_actions, points);
+                  vague_hint = "Naked Pair";
+                  hint = boost::str(boost::format("Naked pair %1%,%2% in box %3%") % digit1 % digit2 % (common_box + 1));
+                  difficulty = Step::TOUGH;
+                  points = 60;
                 }
+              } else if (common_col != -1) {
+                vague_hint = "Naked Pair";
+                hint = boost::str(boost::format("Naked pair %1%,%2% in column %3%") % digit1 % digit2 % (common_col + 1));
+                difficulty = Step::TOUGH;
+                points = 60;
+              } else if (common_row != -1) {
+                vague_hint = "Naked Pair";
+                hint = boost::str(boost::format("Naked pair %1%,%2% in row %3%") % digit1 % digit2 % (common_row + 1));
+                difficulty = Step::TOUGH;
+                points = 60;
               }
+              Actions proposed_actions;
+              proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del_digit1, digit1)));
+              proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del_digit2, digit2)));
+              return Step(*this, vague_hint, hint, difficulty, proposed_actions, points);
             }
           }
         }
-        {
-          const Pencilmarks& p1 = sudoku.get_pencilmarks(k + 9 * i);
-          if (count(p1) == 2) {
-            for (int j = i + 1; j < 9; ++j) {
-              const Pencilmarks& p2 = sudoku.get_pencilmarks(k + 9 * j);
-              if (p1 == p2) {
-                const int d1 = first(p1) + 1;
-                const int d2 = next(p1, d1 - 1) + 1;
-                
-                const int box = get_box(k + 9 * i);
-                if (box == get_box(k + 9 * j)) {
-                  const std::string vague_hint = "Locked pair";
-                  const std::string hint = boost::str(boost::format("Locked pair %1%,%2% in column %3% and box %4%") % d1 % d2 % (k + 1) % (box + 1));
-                  Actions proposed_actions;
-                  Positions del = or_op(COLS[k], BOXES[box]);
-                  del[k + 9 * i] = false;
-                  del[k + 9 * j] = false;
-                  proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del, d1)));
-                  proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del, d2)));
-                  const int points = 40;
-                  return Step(*this, vague_hint, hint, Step::MODERATE, proposed_actions, points);
-                } else {
-                  const std::string vague_hint = "Naked pair";
-                  const std::string hint = boost::str(boost::format("Naked pair %1%,%2% in column %3%") % (d1 + 1) % (d2 + 1) % (k + 1));
-                  Actions proposed_actions;
-                  Positions del = COLS[k];
-                  del[k + 9 * i] = false;
-                  del[k + 9 * j] = false;
-                  proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del, d1)));
-                  proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del, d2)));
-                  const int points = 60;
-                  return Step(*this, vague_hint, hint, Step::TOUGH, proposed_actions, points);
-                }
-              }
-            }
-          }
-        }
-        {
-          const Pencilmarks& p1 = sudoku.get_pencilmarks(box_index1);
-          if (count(p1) == 2) {
-            int box_index2 = next(BOXES[k], box_index1);
-            for (int j = i + 1; j < 9; ++j) {
-              const Pencilmarks& p2 = sudoku.get_pencilmarks(box_index2);
-              if (p1 == p2) {
-                const int d1 = first(p1) + 1;
-                const int d2 = next(p1, d1 - 1) + 1;
-                
-                const int row = get_row(box_index1);
-                if (row == get_row(box_index2)) {
-                  const std::string vague_hint = "Locked pair";
-                  const std::string hint = boost::str(boost::format("Locked pair %1%,%2% in box %3% and row %4%") % d1 % d2 % (k + 1) % (row + 1));
-                  Actions proposed_actions;
-                  Positions del = or_op(BOXES[k], ROWS[row]);
-                  del[box_index1] = false;
-                  del[box_index2] = false;
-                  proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del, d1)));
-                  proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del, d2)));
-                  const int points = 40;
-                  return Step(*this, vague_hint, hint, Step::TOUGH, proposed_actions, points);
-                }
-                
-                const int col = get_col(box_index1);
-                  if (col == get_col(box_index2)) {
-                  const std::string vague_hint = "Locked pair";
-                  const std::string hint = boost::str(boost::format("Locked pair %1%,%2% in box %3% and col %4%") % d1 % d2 % (k + 1) % (col + 1));
-                  Actions proposed_actions;
-                  Positions del = or_op(BOXES[k], COLS[col]);
-                  del[box_index1] = false;
-                  del[box_index2] = false;
-                  proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del, d1)));
-                  proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del, d2)));
-                  const int points = 40;
-                  return Step(*this, vague_hint, hint, Step::TOUGH, proposed_actions, points);
-                }
-
-                const std::string vague_hint = "Naked pair";
-                const std::string hint = boost::str(boost::format("Naked pair %1%,%2% in box %3%") % d1 % d2 % (k + 1));
-                Actions proposed_actions;
-                Positions del = BOXES[k];
-                del[box_index1] = false;
-                del[box_index2] = false;
-                proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del, d1)));
-                proposed_actions.push_back(boost::shared_ptr<Action>(new DeletePencilMark(del, d2)));
-                const int points = 60;
-                return Step(*this, vague_hint, hint, Step::TOUGH, proposed_actions, points);
-              }
-              box_index2 = next(BOXES[k], box_index2);
-            }
-          }
-        }
-        box_index1 = next(BOXES[k], box_index1);
       }
     }
     return Step();
