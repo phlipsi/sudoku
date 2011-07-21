@@ -80,12 +80,87 @@ namespace Sudoku {
   }
 
   template<std::size_t N>
-  inline int count(const boost::array<bool, N>& a) {
-    int result = 0;
-    for (unsigned int i = 0; i < N; ++i) {
-      if (a[i]) ++result;
+  class BoolCounter {
+  public:
+    explicit BoolCounter(const boost::array<bool, N>& array) : array(&array) { }
+  
+    operator int() const {
+      return check(ConstCheck<false>(), Identity());
     }
-    return result;
+    
+    bool operator == (int k) const {
+      return check(Check< std::greater<int> >(k), Check< std::equal_to<int> >(k));
+    }
+    
+    bool operator != (int k) const {
+      return check(Check< std::greater<int> >(k), Check< std::not_equal_to<int> >(k));
+    }
+
+    bool operator < (int k) const {
+      return check(Check< std::greater_equal<int> >(k), Check< std::less<int> >(k));
+    }
+    
+    bool operator <= (int k) const {
+      return check(Check< std::greater<int> >(k), Check< std::less_equal<int> >(k));
+    }
+
+    bool operator > (int k) const {
+      return check(Check< std::greater<int> >(k), Check< std::greater<int> >(k));
+    }
+    
+    bool operator >= (int k) const {
+      return check(Check< std::greater_equal<int> >(k), Check< std::greater_equal<int> >(k));
+    }
+    
+  private:
+    const boost::array<bool, N>* array;
+    
+    template<typename Relation>
+    class Check {
+    public:
+      typedef bool ResultType;
+      Check(int k, Relation relation = Relation()) : k(k), relation(relation) { }
+      bool operator () (int i) const { return relation(i, k); }
+    private:
+      int k;
+      Relation relation;
+    };
+    
+    template<bool Result>
+    struct ConstCheck {
+      typedef bool ResultType;
+      bool operator () (int) const { return Result; }
+    };
+    
+    struct Identity {
+      typedef int ResultType;
+      int operator () (int i) const { return i; }
+    };
+    
+    template<typename AbortCheck, typename Result>
+    typename Result::ResultType check(AbortCheck abort_check, Result result) const {
+      int counter = 0;
+      for (unsigned int i = 0; i < N; ++i) {
+        if ((*array)[i]) ++counter;
+        if (abort_check(counter)) break;
+      }
+      return result(counter);
+    }
+    
+  };
+
+  // template<std::size_t N>
+  // inline int count(const boost::array<bool, N>& a) {
+  //   int result = 0;
+  //   for (unsigned int i = 0; i < N; ++i) {
+  //     if (a[i]) ++result;
+  //   }
+  //   return result;
+  // }
+  
+  template<std::size_t N>
+  BoolCounter<N> count(const boost::array<bool, N>& array) {
+    return BoolCounter<N>(array);
   }
 
   template<std::size_t N>

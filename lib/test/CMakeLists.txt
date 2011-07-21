@@ -17,6 +17,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301, USA.
 
+ADD_EXECUTABLE(boolarraytest boolarraytest.cpp)
+TARGET_LINK_LIBRARIES(boolarraytest sudoku)
+
 ADD_EXECUTABLE(celltest celltest.cpp)
 
 ADD_EXECUTABLE(fieldtest fieldtest.cpp)
