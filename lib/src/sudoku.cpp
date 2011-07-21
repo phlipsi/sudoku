@@ -62,7 +62,7 @@ namespace Sudoku {
     if (setup_mode) {
       return setup_field.set_pencilmark(pos, digit, state);
     } else {
-      return (!state || setup_field.get_pencilmark(pos, digit)) && field.set_pencilmark(pos, digit, true);
+      return (!state || setup_field.get_pencilmark(pos, digit)) && field.set_pencilmark(pos, digit, state);
     }
   }
   

@@ -64,6 +64,11 @@ namespace Sudoku {
     bool set_digit(int pos, int digit);
     bool set_pencilmark(int pos, int digit, bool state);
 
+    template<typename Property>
+    Positions get_positions(Property property) const {
+      return setup_mode ? setup_field.get_positions(property) : field.get_positions(property);
+    }
+
     Positions get_not_set_sole_positions() const {
       return setup_mode ? setup_field.get_not_set_sole_positions() : field.get_not_set_sole_positions();
     }
