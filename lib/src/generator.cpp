@@ -68,26 +68,29 @@ namespace Sudoku {
       const Step::Difficulty difficulty;
       const int min_score;
       const int max_score;
-      int fails;
+      int max_fails;
+      int unique_fails;
+      int unsolvable_fails;
+      int too_difficult_fails;
       const std::vector<Symmetry::const_iterator>& symmetry_classes;
       Solver& solver;
     };
     
     bool generate_impl(Data& data, int next_symmetry) {
       if (!unique(data.field)) {
-        --data.fails;
+        ++data.unique_fails;
         return false;
       }
       const Proceeding p = data.solver.solve(Sudoku(data.field), true);
       if (!p.is_solved()) {
-        --data.fails;
+        ++data.unsolvable_fails;
         return false;
       }
       Step::Difficulty max_diff;
       int score = 0;
       p.evaluate(max_diff, score);
       if (score > data.max_score || max_diff > data.difficulty) {
-        --data.fails;
+        ++data.too_difficult_fails;
         return false;
       }
       if (score >= data.min_score && score <= data.max_score && max_diff == data.difficulty) {
@@ -103,7 +106,7 @@ namespace Sudoku {
         if (generate_impl(data, i + 1)) {
           return true;
         }
-        if (data.fails <= 0) {
+        if (data.unique_fails + data.unsolvable_fails + data.too_difficult_fails >= data.max_fails) {
           return false;
         }
         for (int j = 0; j < 81; ++j) {
@@ -117,7 +120,7 @@ namespace Sudoku {
     
   }
 
-  bool generate(Step::Difficulty difficulty,
+  Info generate(Step::Difficulty difficulty,
                 int min_score, int max_score,
                 int max_fails,
                 const Symmetry& symmetry,
@@ -135,15 +138,18 @@ namespace Sudoku {
       }
       std::random_shuffle(symmetry_classes.begin(), symmetry_classes.end());
   
-      Data data = { original_field, field, difficulty, min_score, max_score, max_fails, symmetry_classes, solver };
+      Data data = { original_field, field, difficulty, min_score, max_score, max_fails, 0, 0, 0, symmetry_classes, solver };
       const bool result = generate_impl(data, 0);
       if (result) {
         sudoku = Sudoku(field);
-        return true;
+        return Info(true, data.unique_fails, data.unsolvable_fails, data.too_difficult_fails);
+      } else {
+        sudoku = Sudoku();
+        return Info(false, data.unique_fails, data.unsolvable_fails, data.too_difficult_fails);
       }
     }
     
     sudoku = Sudoku();
-    return false;
+    return Info(false, 0, 0, 0);
   }
 } // namespace Sudoku
