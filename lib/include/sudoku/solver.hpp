@@ -24,6 +24,7 @@
 #include <utility>
 
 #include <sudoku/proceeding.hpp>
+#include <sudoku/step.hpp>
 #include <sudoku/technique.hpp>
 #include <sudoku/techniquelist.hpp>
 
@@ -69,7 +70,10 @@ namespace Sudoku {
     const_iterator begin() const { return list.begin(); }
     const_iterator end() const { return list.end(); }
     
-    Proceeding solve(const Sudoku& sudoku, bool assume_uniqueness);
+    Proceeding solve(const Sudoku& sudoku,
+                     Step::Difficulty max_difficulty,
+                     int max_score,
+                     bool assume_uniqueness);
   private:
     TechniqueList list;
   };

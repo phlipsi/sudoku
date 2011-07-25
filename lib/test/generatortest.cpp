@@ -34,7 +34,7 @@ int main() {
   if (info) {
     sudoku.print(std::cout);
     std::cout << '\n';
-    Sudoku::Proceeding p = solver.solve(sudoku, true);
+    Sudoku::Proceeding p = solver.solve(sudoku, Sudoku::Step::TOUGH, 2000, true);
     int score;
     Sudoku::Step::Difficulty difficulty;
     p.evaluate(difficulty, score);

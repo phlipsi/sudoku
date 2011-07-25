@@ -26,7 +26,12 @@
 
 namespace Sudoku {
 
-  Proceeding Solver::solve(const Sudoku& sudoku, bool assume_uniqueness) {
+  Proceeding Solver::solve(const Sudoku& sudoku,
+                           Step::Difficulty max_difficulty,
+                           int max_score,
+                           bool assume_uniqueness) {
+    int score = 0;
+    Step::Difficulty difficulty = Step::EASY;
     Proceeding proceeding;
     proceeding.clear_steps();
     list.reset_techniques();
@@ -41,6 +46,14 @@ namespace Sudoku {
           if (!step.is_empty()) {
             if (step.apply(temp)) {
               success = true;
+              score += step.get_points();
+              if (step.get_difficulty() > difficulty) {
+                difficulty = step.get_difficulty();
+              }
+              if (score > max_score || difficulty > max_difficulty) {
+                proceeding.set_solved(false);
+                return proceeding;
+              }
               proceeding.append_step(step);
               break;
             }

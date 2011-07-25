@@ -81,7 +81,7 @@ namespace Sudoku {
         ++data.unique_fails;
         return false;
       }
-      const Proceeding p = data.solver.solve(Sudoku(data.field), true);
+      const Proceeding p = data.solver.solve(Sudoku(data.field), data.difficulty, data.max_score, true);
       if (!p.is_solved()) {
         ++data.unsolvable_fails;
         return false;

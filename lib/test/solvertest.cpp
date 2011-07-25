@@ -34,7 +34,7 @@ int main() {
   Sudoku::Solver solver;
   register_common_techniques(solver);
 
-  Sudoku::Proceeding p = solver.solve(sudoku, true);
+  Sudoku::Proceeding p = solver.solve(sudoku, Sudoku::Step::TOUGH, 2000, true);
   if (p.is_solved()) {
     Sudoku::Step::Difficulty max_diff = Sudoku::Step::EASY;
     int score = 0;
