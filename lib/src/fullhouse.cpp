@@ -12,7 +12,17 @@ namespace Sudoku {
   Step FullHouse::do_try_technique(const Sudoku& sudoku) {
     const Positions p = sudoku.get_positions(Cell::digit() == 0); // sudoku.get_not_fixed_positions();
     for (int j = 0; j < 9; ++j) {
-      if (is_sole(and_op(p, ROWS[j]))) {
+      int row_count = 0;
+      int col_count = 0;
+      int box_count = 0;
+      for (int i = 0; i < 81; ++i) {
+        if (sudoku.get_digit(i) != 0) {
+          if (ROWS[j][i]) ++row_count;
+          if (COLS[j][i]) ++col_count;
+          if (BOXES[j][i]) ++box_count;
+        }
+      }
+      if (row_count == 8) {
         const std::string vague_hint = "Full House";
         const std::string hint = boost::str(boost::format("Full House in row %1%") % (j + 1));
         Actions proposed_actions;
@@ -34,7 +44,7 @@ namespace Sudoku {
         const int points = 4;
         return Step(*this, vague_hint, hint, Step::EASY, proposed_actions, points);
       }
-      if (is_sole(and_op(p, COLS[j]))) {
+      if (col_count == 8) {
         const std::string vague_hint = "Full House";
         const std::string hint = boost::str(boost::format("Full House in column %1%") % (j + 1));
         Actions proposed_actions;
@@ -56,7 +66,7 @@ namespace Sudoku {
         const int points = 4;
         return Step(*this, vague_hint, hint, Step::EASY, proposed_actions, points);
       }
-      if (is_sole(and_op(p, BOXES[j]))) {
+      if (box_count == 8) {
         const std::string vague_hint = "Full House";
         const std::string hint = boost::str(boost::format("Full House in box %1%") % (j + 1));
         Actions proposed_actions;
