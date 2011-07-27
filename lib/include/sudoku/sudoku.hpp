@@ -95,6 +95,7 @@ namespace Sudoku {
     
     void restart_pencilmarks();
     
+    bool is_valid() const { return setup_mode ? setup_field.is_valid() : field.is_valid(); }
     bool is_finished() const { return setup_mode ? setup_field.is_finished() : field.is_finished(); }
 
     bool unique(int max_fails = -1) const { return setup_mode ? setup_field.unique(max_fails) : field.unique(max_fails); }

@@ -56,18 +56,81 @@ namespace Sudoku {
   }
 
   bool Field::is_valid() const {
-    if (!is_empty(get_empty_positions())) return false;
-    for (int digit = 1; digit <= 9; ++digit) {
-      const Positions digit_pos = get_digit_positions(digit);
-      for (int i = 0; i < 9; ++i) {
-        if (is_empty(and_op(digit_pos, ROWS[i]))) return false;
-        if (is_empty(and_op(digit_pos, COLS[i]))) return false;
-        if (is_empty(and_op(digit_pos, BOXES[i]))) return false;
+    boost::array<bool, 9> occured_row;
+    boost::array<bool, 9> occured_col;
+    boost::array<bool, 9> occured_box;
+    
+    for (int k = 0; k < 9; ++k) {
+      occured_row.assign(false);
+      occured_col.assign(false);
+      occured_box.assign(false);
+      
+      for (int i = 0; i < 81; ++i) {
+        const int d = cells[i].get_digit();
+        if (d != 0) {
+          if (ROWS[k][i]) {
+            if (occured_row[d - 1]) {
+              return false;
+            }
+            occured_row[d - 1] = true;
+          }
+          if (COLS[k][i]) {
+            if (occured_col[d - 1]) {
+              return false;
+            }
+            occured_col[d - 1] = true;
+          }
+          if (BOXES[k][i]) {
+            if (occured_box[d - 1]) {
+              return false;
+            }
+            occured_box[d - 1] = true;
+          }
+        }
       }
     }
     return true;
   }
   
+  bool Field::is_finished() const {
+    boost::array<bool, 9> occured_row;
+    boost::array<bool, 9> occured_col;
+    boost::array<bool, 9> occured_box;
+    
+    for (int k = 0; k < 9; ++k) {
+      occured_row.assign(false);
+      occured_col.assign(false);
+      occured_box.assign(false);
+      
+      for (int i = 0; i < 81; ++i) {
+        const int d = cells[i].get_digit();
+        if (d != 0) {
+          if (ROWS[k][i]) {
+            if (occured_row[d - 1]) {
+              return false;
+            }
+            occured_row[d - 1] = true;
+          }
+          if (COLS[k][i]) {
+            if (occured_col[d - 1]) {
+              return false;
+            }
+            occured_col[d - 1] = true;
+          }
+          if (BOXES[k][i]) {
+            if (occured_box[d - 1]) {
+              return false;
+            }
+            occured_box[d - 1] = true;
+          }
+        } else {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   bool Field::is_allowed(int pos, int digit) const {
     bool result = true;
     for (int i = 0; i < 81; ++i) {

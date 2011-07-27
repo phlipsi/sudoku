@@ -76,9 +76,7 @@ namespace Sudoku {
     bool is_valid() const;
     
     // Valid field with no unset cells
-    bool is_finished() const {
-      return is_valid() && is_empty(get_not_fixed_positions());
-    }
+    bool is_finished() const;
 
     // Pleasy use this method instead of the plethora of methods like
     // get_***_positions() and so on
