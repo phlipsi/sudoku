@@ -31,6 +31,21 @@ TARGET_LINK_LIBRARIES(fieldtest sudoku)
 ADD_EXECUTABLE(techniquestest techniquestest.cpp)
 TARGET_LINK_LIBRARIES(techniquestest sudoku)
 
+ADD_EXECUTABLE(fullhousetest fullhousetest.cpp)
+TARGET_LINK_LIBRARIES(fullhousetest sudoku)
+
+ADD_EXECUTABLE(hiddensingletest hiddensingletest.cpp)
+TARGET_LINK_LIBRARIES(hiddensingletest sudoku)
+
+ADD_EXECUTABLE(lastinstancetest lastinstancetest.cpp)
+TARGET_LINK_LIBRARIES(lastinstancetest sudoku)
+
+ADD_EXECUTABLE(nakedpairtest nakedpairtest.cpp)
+TARGET_LINK_LIBRARIES(nakedpairtest sudoku)
+
+ADD_EXECUTABLE(nakedsingletest nakedsingletest.cpp)
+TARGET_LINK_LIBRARIES(nakedsingletest sudoku)
+
 ADD_EXECUTABLE(solvertest solvertest.cpp)
 TARGET_LINK_LIBRARIES(solvertest sudoku)
 
@@ -39,3 +54,13 @@ TARGET_LINK_LIBRARIES(symmetrytest sudoku)
 
 ADD_EXECUTABLE(generatortest generatortest.cpp)
 TARGET_LINK_LIBRARIES(generatortest sudoku)
+
+ADD_TEST(boolarraytest boolarraytest)
+ADD_TEST(celltest celltest)
+ADD_TEST(fieldtest fieldtest)
+ADD_TEST(symmetrytest symmetrytest)
+ADD_TEST(fullhousetest fullhousetest)
+ADD_TEST(hiddensingletest hiddensingletest)
+ADD_TEST(lastinstancetest lastinstancetest)
+ADD_TEST(nakedpairtest nakedpairtest)
+ADD_TEST(nakedsingletest nakedsingletest)

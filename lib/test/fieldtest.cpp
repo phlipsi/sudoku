@@ -29,6 +29,7 @@ using namespace Sudoku;
 int main() {
   {
     Field f;
+    assert(f.is_valid());
     for (int i = 0; i < 81; ++i) {
       assert(f[i].is_open());
       assert(f[i].get_digit() == 0);
@@ -42,6 +43,7 @@ int main() {
   {
     const std::string sudoku = "003902000012800390690000700430009050000005600200630001064090100070500000000004008";
     Field f(sudoku);
+    assert(f.is_valid());
     std::stringstream s;
     s << f;
     
@@ -123,6 +125,7 @@ int main() {
   
   {
     Field f("003902000012800390690000700430009050000005600200630001064090100070500000000004008");
+    assert(f.is_valid());
     std::list<Field> solutions;
     assert(f.solutions(2, solutions) == 1);
     assert(solutions.size() == 1);
@@ -131,6 +134,7 @@ int main() {
   
   {
     Field f("000902000012800390690000700430009050000005600200630001064090100070500000000004008");
+    assert(f.is_valid());
     std::list<Field> solutions;
     assert(f.solutions(2, solutions) == 2);
     assert(solutions.size() == 2);
@@ -138,6 +142,7 @@ int main() {
   
   {
     Field f;
+    assert(f.is_valid());
     std::list<Field> solutions;
     const int sols = f.solutions(10, solutions);
     assert(sols == 10);
