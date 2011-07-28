@@ -53,7 +53,7 @@ ADD_EXECUTABLE(symmetrytest symmetrytest.cpp)
 TARGET_LINK_LIBRARIES(symmetrytest sudoku)
 
 ADD_EXECUTABLE(generatortest generatortest.cpp)
-TARGET_LINK_LIBRARIES(generatortest sudoku)
+TARGET_LINK_LIBRARIES(generatortest sudoku gitsha1)
 
 ADD_TEST(boolarraytest boolarraytest)
 ADD_TEST(celltest celltest)

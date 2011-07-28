@@ -9,9 +9,13 @@
 #include <sudoku/solver.hpp>
 #include <sudoku/common_techniques.hpp>
 
+#include <gitsha1.hpp>
+
 int main() {
-  // srand(time(NULL));
-    
+  srand(time(NULL));
+  
+  std::cout << GIT_HASH << std::endl;
+  
   Sudoku::Solver solver;
   solver.append_technique(Sudoku::full_house);
   solver.append_technique(Sudoku::last_instance);
