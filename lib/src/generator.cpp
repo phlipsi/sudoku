@@ -68,6 +68,7 @@ namespace Sudoku {
       const Step::Difficulty difficulty;
       const int min_score;
       const int max_score;
+      int cells_set;
       int max_fails;
       int unique_fails;
       int unsolvable_fails;
@@ -77,6 +78,9 @@ namespace Sudoku {
     };
     
     bool generate_impl(Data& data, int next_symmetry) {
+      if (data.cells_set < 17) {
+        return false;
+      }
       if (!unique(data.field)) {
         ++data.unique_fails;
         return false;
@@ -101,6 +105,7 @@ namespace Sudoku {
         for (int j = 0; j < 81; ++j) {
           if (symmetry_class[j]) {
             data.field[j] = 0;
+            --data.cells_set;
           }
         }
         if (generate_impl(data, i + 1)) {
@@ -112,6 +117,7 @@ namespace Sudoku {
         for (int j = 0; j < 81; ++j) {
           if (symmetry_class[j]) {
             data.field[j] = data.original_field[j];
+            ++data.cells_set;
           }
         }
       }
@@ -138,7 +144,7 @@ namespace Sudoku {
       }
       std::random_shuffle(symmetry_classes.begin(), symmetry_classes.end());
   
-      Data data = { original_field, field, difficulty, min_score, max_score, max_fails, 0, 0, 0, symmetry_classes, solver };
+      Data data = { original_field, field, difficulty, min_score, max_score, 81, max_fails, 0, 0, 0, symmetry_classes, solver };
       const bool result = generate_impl(data, 0);
       if (result) {
         sudoku = Sudoku(field);
