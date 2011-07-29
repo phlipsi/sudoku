@@ -17,5 +17,5 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301, USA.
 
-CONFIGURE_FILE("gitsha1.cpp.in" "${CMAKE_CURRENT_BINARY_DIR}/gitsha1.cpp" @ONLY)
-ADD_LIBRARY(gitsha1 STATIC "${CMAKE_CURRENT_BINARY_DIR}/gitsha1.cpp")
+CONFIGURE_FILE("gitinfo.cpp.in" "${CMAKE_CURRENT_BINARY_DIR}/gitinfo.cpp" @ONLY)
+ADD_LIBRARY(buildinfo STATIC "${CMAKE_CURRENT_BINARY_DIR}/gitinfo.cpp")

@@ -1,3 +1,0 @@
-#include <gitsha1.hpp>
-
-const char GIT_HASH[] = "@GIT_SHA1@";
